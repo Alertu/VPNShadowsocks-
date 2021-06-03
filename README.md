@@ -1,100 +1,95 @@
 # VPN
-## VPN
+
+
+
 2018.11.15：更换系统为 CentOS 7 x64，建议使用 BBR 进行优化加速。
 
-内容概览：
+1. 内容概览：
+2. 注册 & 安装 VPS
+3. 连接 VPS
+4. vultr搭建shadowsocks
+5. 使用方法
+6. 效果测试
+7. 常见问题
+   
+   
 
-注册 & 安装 VPS
-连接 VPS
-vultr搭建shadowsocks
-使用方法
-效果测试
-常见问题
-Tips
-一、注册 & 安装
-注册
-打开 Vultr 官网：Vultr
+##### 一、注册 & 安装
 
-或者我的邀请链接：http://www.vultr.com/?ref=7585919
-（大家用这个链接注册，可以支持下博主；新用户首次充值 $10，送 $25，你一共可以得到 $35 （18年5月21日更新） (　＾∀＾) ）
+##### 注册
 
-vultr（1）.png
-输入邮箱和密码，点击 “Create Account” 创建账户即可。
+打开[Vultr](http://www.vultr.com 'Vultr') 官网：[Vultr](http://www.vultr.com 'Vultr')
 
-充值
-注册登录后会进入个人面板，左边栏选择 “Billing” ，选择支付方式和金额，付款即可。Vultr 现在支持支付宝，很方便。
 
-vultr（2）.png
-安装VPS
-选择 “Servers” ，点击右边蓝色的 “+” 添加 VPS。
 
-vultr（3）.png
-1.选择节点
+##### 1.选择节点
 
 我选择的 “Tokyo” 日本节点，距离最近，效果不错。当然，网络环境不同，效果也有差别，大家可以自己测试下，方法可以在后文的 Tips 中查看。
 
 2018.7.26 更新：日本节点太火了，现在效果不太好，建议更换为其它节点，如纽约、洛杉矶等。节点选择工具：HTTP Ping VPS 节点选择工具
 
-vultr（4）.png
-2.选择系统
+
+
+##### 2.选择系统
 
 选择 “CentOS 7 x64” 系统。
 
-vultr（5）.png
-3.选择套餐
+
+
+##### 3.选择套餐
+
+
 
 一般自己用 $5/月 的每月有 1000G 流量也够用了，可以按个人需要选择。
 
 注意：最低 $2.5/mo 的套餐现在只支持 IPv6 网络，非 IPv6 不要选这个套餐，请选择其他的！
 
-vultr（6）.png
-4.其他选项
+
+
+##### 4.其他选项
 
 有 IPv6，私密，域名、标签等，无特殊需要全部默认即可。
 
 选好后点击右下角的 “Deploy Now” ，开始安装 VPS。
 
 查看管理 VPS
+
 已添加的 VPS 都会显示在 “Servers” 面板中，当显示 “Running” 时即表示安装完成。点击 “Manage” 进入 VPS 管理面板。
 
-vultr（8）.png
 VPS 管理面板，这里需要记录下 IP 地址（IP Address）、用户名（Username）、密码（Password）供稍后连接时使用。
 
-vultr（9）.png
-二、连接
-使用 ssh 工具连接我们的 VPS，Windows 推荐 xshell，Mac 可使用自带的终端。
+##### 二、连接
+
+使用 ssh 工具连接我们的 VPS，Windows 推荐 PuTTY/XShell，Mac 可使用自带的终端。
 
 xshell 网盘链接：pan.baidu.com/s/1hoH6qLZIx-cFw4WLtqMprw    密码：p6dp
 
+
+
 Windows
-安装 xshell，打开软件。
+安装 PuTTY/XShell，打开软件。
 
 点击 “文件” —> “新建” —> “连接”，输入 “名称” 和 “主机” （即VPS ip）。
-
-vultr（11）.png
-点击 “用户身份验证”，输入用户名（默认root）和密码。确认。
-
-vultr（12）.png
-连接 VPS，接受并保存密匙。
-
-vultr（15）.png
-vultr（13）.png
 出现 root@vultr:~# 即连接成功。
 
-vultr（14）.png
+
+
 Mac
 打开终端，输入以下代码登录 VPS，其中 root 即用户名，将 ip 更改为 VPS 的 IP 地址，回车。
 
 ssh root@ip
-1
-ssh root@ip
-输入 yes 确认，粘贴密码，回车。需要提醒的是，密码输入时并不会显示出来，直接复制粘贴，回车即可。出现 root@vultr:~# 即连接成功。
+输入 yes 确认，粘贴密码，回车。需要提醒的是，密码输入时并不会显示出来，直接复制粘贴，回车即可。
 
-vultr（16）.png
-三、 vultr搭建shadowsocks
+出现 root@vultr:~# 即连接成功。
+
+
+
+##### 三、 vultr搭建shadowsocks
+
 连接上之后，就可以开始搭建了。
 
-1.安装锐速 / 谷歌 BBR 加速优化
+##### 1.安装锐速 / 谷歌 BBR 加速优化
+
 说明：锐速和 BBR 都是加速优化的方法，两者效果差不多。锐速是收费项目，这里用的是 91yun 破解版；BBR 为谷歌免费开源项目，二选一即可。（选择困难症直接 BBR）
 
 需要注意的是，锐速已停止更新，新内核不太兼容，尽量用 BBR 优化加速。
@@ -103,58 +98,91 @@ vultr（16）.png
 
 使用锐速加速优化，直接复制粘贴下面命令，回车运行。
 
+```shell
 wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh && bash serverspeeder-all.sh
 1
 wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh && bash serverspeeder-all.sh
-vultr（17）.png
-谷歌 BBR
+
+```
+
+
 
 逐行执行下面命令安装 BBR。
 
-# 下载脚本
-wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+#### 谷歌 BBR
 
-# 添加执行权限
-chmod +x bbr.sh
+##### 下载脚本
 
-# 执行脚本安装
-./bbr.sh
-1
-2
-3
-4
-5
-6
-7
-8
-# 下载脚本
+```
 wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
- 
-# 添加执行权限
+```
+
+
+
+##### 添加执行权限
+
+```
 chmod +x bbr.sh
- 
-# 执行脚本安装
+```
+
+
+
+##### 执行脚本安装
+
+```
 ./bbr.sh
+```
+
+
+
+##### 下载脚本
+
+```
+wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+```
+
+
+
+##### 添加执行权限
+
+```
+chmod +x bbr.sh
+```
+
+
+
+##### 执行脚本安装
+
+```shell
+./bbr.sh
+
 显示 “Press any key to start…” 按回车确认。
+```
 
-安装完后，按提示重启 VPS，输入 Y 回车重启。稍候 1min 等待重启完成，再重新连接 Xshell。
+安装完后，按提示重启 VPS，输入 Y 回车重启。稍候 1min 等待重启完成，再重新连接 。
 
 重启后输入 lsmod | grep bbr ，出现 tcp_bbr 即说明 BBR 已经启动。
 
-2.安装SS
+
+
+##### 2.安装SS
+
 依次运行下面三行命令，如下图所示按要求输入相应信息。建议：端口选择大于 1000 的。
 
+```shell
 wget --no-check-certificate -O shadowsocks.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
 
 chmod +x shadowsocks.sh
 
 ./shadowsocks.sh 2>&1 | tee shadowsocks.log
+```
 
-安装完成，把标红的连接信息记录下来，就可以关闭 xshell 了。
+安装完成，把标红的连接信息记录下来，就可以关闭 了。
 
 服务端搭建完成！(*^▽^*)
 
-3.多用户配置
+##### 3.多用户配置
+
 自己用的话不建议配置这一步，可跳过该步，因为不熟悉操作的话，很容易在这一步出问题！
 
 如果想和一两个亲友一起用的话，可以继续本步。先说注意事项：
@@ -164,11 +192,23 @@ chmod +x shadowsocks.sh
 配置好后 重启 shadowsocks 才会生效
 首先，我们 把配置信息准备好，把下面的代码复制到记事本中（# 开头的是注释，不要复制进去），按要求把 "port_password"{……} 中的端口和密码改为自己需要的，其他默认。
 
-# 1.先设置编辑好端口和对应的密码
-# 2.添加或删除的用户都在 "port_password"{……} 中
-# 3.用户信息格式，注意末尾的英文逗号："端口"："密码",  如 "8006": "123456",
-# 4."method" 为加密方式，可修改，默认也可以，客户端的加密方式也是这个
 
+
+##### 1.先设置编辑好端口和对应的密码
+
+
+
+##### 2.添加或删除的用户都在 "port_password"{……} 中
+
+
+
+##### 3.用户信息格式，注意末尾的英文逗号："端口"："密码",  如 "8006": "123456",
+
+
+
+##### 4."method" 为加密方式，可修改，默认也可以，客户端的加密方式也是这个
+
+```
 {
     "server":"0.0.0.0",
     "local_address":"127.0.0.1",
@@ -183,16 +223,19 @@ chmod +x shadowsocks.sh
     "timeout":300,
     "method":"aes-256-cfb",
     "fast_open": false
+```
+
 然后，在 /etc 下新建 shadowsocks.json 配置文件：
 
-# 创建配置文件
+##### 创建配置文件
 
 vi /etc/shadowsocks.json
-1
+
 2
 3
+
 # 创建配置文件
- 
+
 vi /etc/shadowsocks.json
 出现一列波浪线即进入 vim。
 
